@@ -1,7 +1,6 @@
 import requests
 
 PROPUBLICA_BASE_URL = 'https://api.propublica.org/congress/v1/'
-PROPUBLICA_API_KEY = "bhoFdFguZwZJWIOFn2yFfC1VYy8lFjw0VrTcpn4Q"
 
 
 def get_district_data(api_key, state, district):
