@@ -1,0 +1,28 @@
+<!doctype html>
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Who Do I Blame? {% block title %}{% endblock %}</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://opensource.keycdn.com/fontawesome/4.7.0/font-awesome.min.css" integrity="sha384-dNpIIXE8U05kAbPhy3G1cz+yZmTzA6CY8Vg/u2L9xRnHjJiAK76m2BIEaSEV+/aU" crossorigin="anonymous">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+    </head>
+    <body>
+        {% block body %}
+
+        {% endblock %}
+
+        <div class="container-fluid footer-row">
+            <div class="row">
+                <div class="col-sm">
+                    <p class="text-center">A <strong><a href="http://funkatron.com">Funkatron</a></strong> production. Data provided by <a href="http://geocod.io/">Geocod.io</a> and <a href="https://www.propublica.org/datastore/">Propublica</a>. This will only work in the US.</p>
+
+                    <p class="text-center"><a href="https://github.com/funkatron/whodoiblame" class="fi-social-github github-footer-link"> Source code</a>. If you have a problem, <em>please</em> <a href="https://github.com/funkatron/whodoiblame/issues">file an issue!</a></p>
+
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>
