@@ -2,7 +2,7 @@ from flask import request, render_template, redirect, url_for
 from .geocodio import get_address_data
 from .propublica import get_district_data
 from pymemcache.client.base import Client
-import json
+import pickle
 
 from whodoiblame import app
 
@@ -19,14 +19,14 @@ def get_results():
     address = request.form.get('address', None)
 
     cache_key = "GEO_%s" % address
-    address_info_json = cache.get(cache_key)
+    address_info_pickle = cache.get(cache_key)
 
-    if address_info_json:
-        address_info = json.loads(address_info_json)
+    if address_info_pickle:
+        address_info = pickle.loads(address_info_pickle)
         print('pulled address from cache')
     else:
         address_info = get_address_data(app.config['GEOCODIO_API_KEY'], address)
-        cache.set(cache_key, json.dumps(address_info), expire=3600)
+        cache.set(cache_key, pickle.dumps(address_info), expire=3600)
         print("set to address to cache")
 
     state = address_info['address_components']['state']
@@ -38,14 +38,14 @@ def get_results():
 @app.route('/<state>/<int:district>', methods=['GET'])
 def show_district_info(state, district):
     cache_key = "REPS_%s_%s" % (state, district)
-    reps_json = cache.get(cache_key)
+    reps_pickle = cache.get(cache_key)
 
-    if reps_json:
-        reps = json.loads(reps_json)
+    if reps_pickle:
+        reps = pickle.loads(reps_pickle)
         print('pulled reps from cache')
     else:
         reps = get_district_data(app.config['PROPUBLICA_API_KEY'], state, district)
-        cache.set(cache_key, json.dumps(reps), expire=3600)
+        cache.set(cache_key, pickle.dumps(reps), expire=3600)
         print("set reps to cache")
 
     return render_template('pages/index.jinja2', reps=reps)
