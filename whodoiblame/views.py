@@ -32,7 +32,11 @@ def get_results():
         address_info = pickle.loads(address_info_pickle)
         print('pulled address from cache')
     else:
-        address_info = get_address_data(app.config['GEOCODIO_API_KEY'], address)
+        try:
+            address_info = get_address_data(app.config['GEOCODIO_API_KEY'], address)
+        except Exception:
+            error_msg = "We encountered a problem with that address. Try being more specific, and include a ZIP code"
+            return render_template('pages/error.jinja2', error_msg=error_msg)
         cache.set(cache_key, pickle.dumps(address_info), expire=3600)
         print("set to address to cache")
 
@@ -51,7 +55,11 @@ def show_district_info(state, district):
         reps = pickle.loads(reps_pickle)
         print('pulled reps from cache')
     else:
-        reps = get_district_data(app.config['PROPUBLICA_API_KEY'], state, district)
+        try:
+            reps = get_district_data(app.config['PROPUBLICA_API_KEY'], state, district)
+        except Exception:
+            error_msg = "Senator/Rep. lookup on Propublica failed for that state/district combination"
+            return render_template('pages/error.jinja2', error_msg=error_msg)
         cache.set(cache_key, pickle.dumps(reps), expire=3600)
         print("set reps to cache")
 
