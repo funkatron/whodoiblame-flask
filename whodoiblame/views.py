@@ -3,10 +3,17 @@ from .geocodio import get_address_data
 from .propublica import get_district_data
 from pymemcache.client.base import Client
 import pickle
+import hashlib
 
 from whodoiblame import app
 
 cache = Client((app.config['MEMCACHE_HOST'], app.config['MEMCACHE_PORT']))
+
+
+def get_md5(to_hash):
+    m = hashlib.md5()
+    m.update(to_hash.encode('utf8'))
+    return m.hexdigest()
 
 
 @app.route('/', methods=['GET'])
@@ -18,7 +25,7 @@ def index():
 def get_results():
     address = request.form.get('address', None)
 
-    cache_key = "GEO_%s" % address
+    cache_key = get_md5("GEO_%s" % address)
     address_info_pickle = cache.get(cache_key)
 
     if address_info_pickle:
@@ -37,7 +44,7 @@ def get_results():
 
 @app.route('/<state>/<int:district>', methods=['GET'])
 def show_district_info(state, district):
-    cache_key = "REPS_%s_%s" % (state, district)
+    cache_key = get_md5("REPS_%s_%s" % (state, district))
     reps_pickle = cache.get(cache_key)
 
     if reps_pickle:
